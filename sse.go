@@ -1,9 +1,12 @@
 package main
 
 import (
+	"bufio"
+	"flag"
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"time"
 )
 
@@ -96,13 +99,11 @@ func (broker *Broker) listen() {
 			// A new client has connected.
 			// Register their message channel
 			broker.clients[s] = true
-			log.Printf("Client added. %d registered clients", len(broker.clients))
 		case s := <-broker.closingClients:
 
 			// A client has dettached and we want to
 			// stop sending them messages.
 			delete(broker.clients, s)
-			log.Printf("Removed client. %d registered clients", len(broker.clients))
 		case event := <-broker.Notifier:
 
 			// We got a new event from the outside!
@@ -115,19 +116,47 @@ func (broker *Broker) listen() {
 
 }
 
+func HandleWithPrompt(broker *Broker, r *bufio.Reader) {
+
+	for {
+
+		fmt.Printf("(%d clients)-> ", len(broker.clients))
+
+		line, _, err := r.ReadLine()
+		if err != nil {
+			fmt.Println(err)
+		}
+		fmt.Println(string(line))
+		broker.Notifier <- []byte(line)
+	}
+}
+
 func main() {
 
 	broker := NewServer()
+	r := bufio.NewReader(os.Stdin)
 
-	go func() {
-		for {
-			time.Sleep(time.Second * 2)
-			eventString := fmt.Sprintf("the time is %v", time.Now())
-			log.Println("Receiving event")
-			broker.Notifier <- []byte(eventString)
-		}
-	}()
+	promptPtr := flag.Bool("prompt", false, "Run as interactive mode")
+	addrPtr := flag.String("l", "listen", "Listening address and port (default localhost:3000)")
 
-	log.Fatal("HTTP server error: ", http.ListenAndServe("localhost:3000", broker))
+	flag.CommandLine.Parse(os.Args[1:])
+
+	if *promptPtr {
+		go HandleWithPrompt(broker, r)
+	} else {
+		fmt.Println("Reading from Stdin")
+
+		go func() {
+			for {
+				text, _ := r.ReadString('\n')
+				broker.Notifier <- []byte(text)
+				time.Sleep(time.Second)
+			}
+
+		}()
+	}
+
+	fmt.Println("Listening on ", *addrPtr)
+	log.Fatal("HTTP server error: ", http.ListenAndServe(*addrPtr, broker))
 
 }
