@@ -126,7 +126,7 @@ func HandleWithPrompt(broker *Broker, r *bufio.Reader) {
 		if err != nil {
 			fmt.Println(err)
 		}
-		fmt.Println(string(line))
+		fmt.Printf("Sent message: %s\n", string(line))
 		broker.Notifier <- []byte(line)
 	}
 }
