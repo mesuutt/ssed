@@ -136,8 +136,8 @@ func main() {
 	broker := NewServer()
 	r := bufio.NewReader(os.Stdin)
 
-	promptPtr := flag.Bool("prompt", false, "Run as interactive mode")
-	addrPtr := flag.String("l", "listen", "Listening address and port (default localhost:3000)")
+	promptPtr := flag.Bool("p", false, "Show prompt for message which send to clients")
+	addrPtr := flag.String("l", "localhost:3000", "Listening address and port")
 
 	flag.CommandLine.Parse(os.Args[1:])
 
