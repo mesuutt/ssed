@@ -1,10 +1,18 @@
-###SSE server that you can use for pipe output of any app to sse clients.
+###You can use ssed for pipe output of any app to sse clients.
+
+### How to install ssed
+
+```bash
+$ go get github.com/mesuutt/ssed
+```
+
+### Usage
 
 You can pipe output of any app to clients shown as below:
 
 ```bash
 $ ./printnumbers.sh | ssed
-Reading from Stdin
+Reading from STDIN
 Listening on  localhost:3000
 ```
 
@@ -19,8 +27,6 @@ Sent message: hello
 Sent message: how are you?
 ```
 
-
-### Usage
 
 ```
 $ ssed -h
