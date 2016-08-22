@@ -116,7 +116,7 @@ func (broker *Broker) listen() {
 
 }
 
-func HandleWithPrompt(broker *Broker, r *bufio.Reader) {
+func PromptHandler(broker *Broker, r *bufio.Reader) {
 
 	for {
 
@@ -142,9 +142,9 @@ func main() {
 	flag.CommandLine.Parse(os.Args[1:])
 
 	if *promptPtr {
-		go HandleWithPrompt(broker, r)
+		go PromptHandler(broker, r)
 	} else {
-		fmt.Println("Reading from Stdin")
+		fmt.Println("Reading from STDIN")
 
 		go func() {
 			for {
