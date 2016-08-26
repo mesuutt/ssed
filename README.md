@@ -8,7 +8,7 @@ $ go get github.com/mesuutt/ssed
 
 ### Usage
 
-You can pipe output of any app to clients shown as below:
+You can pipe output of any app to sse clients shown as below:
 
 ```bash
 $ ./printnumbers.sh | ssed
@@ -21,9 +21,9 @@ Also you can send messages to clients with a prompt with starting `ssed` with `-
 ```bash
 $ ssed -p
 Listening on  localhost:3000
-(2 clients)-> hello
+(1 clients)-> hello
 Sent message: hello
-(2 clients)-> how are you?
+(1 clients)-> how are you?
 Sent message: how are you?
 ```
 
