@@ -1,4 +1,4 @@
-###You can use ssed for pipe output of any app to sse clients.
+###You can use ssed for pipe STDOUT of any command-line program to SSE clients.
 
 ### How to install ssed
 
@@ -8,15 +8,16 @@ $ go get github.com/mesuutt/ssed
 
 ### Usage
 
-You can pipe output of any app to sse clients shown as below:
+You can pipe STDOUT of any command-line program to ssed for send output 
+of the program to the SSE clients shown as below:
 
 ```bash
-$ ./printnumbers.sh | ssed
+$ ./printEverySecond.sh | ssed
 Reading from STDIN
 Listening on  localhost:3000
 ```
 
-Also you can send messages to clients with a prompt with starting `ssed` with `-p` argument:
+Also you can send messages to SSE clients with a prompt with starting `ssed` with `-p` argument:
 
 ```bash
 $ ssed -p
