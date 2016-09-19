@@ -1,6 +1,7 @@
 ###You can use ssed for pipe STDOUT of any command-line program to SSE clients.
 
-### How to install ssed
+
+#### How to install ssed?
 
 ```bash
 $ go get github.com/mesuutt/ssed
@@ -9,7 +10,7 @@ $ go get github.com/mesuutt/ssed
 ### Usage
 
 You can pipe STDOUT of any command-line program to ssed for send output 
-of the program to the SSE clients shown as below:
+of the program to the SSE clients:
 
 ```bash
 $ ./printEverySecond.sh | ssed
