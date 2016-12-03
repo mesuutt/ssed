@@ -138,8 +138,13 @@ func main() {
 
 	promptPtr := flag.Bool("p", false, "Show prompt for message which send to clients")
 	addrPtr := flag.String("l", "localhost:3000", "Listening address and port")
+	verbosePtr := flag.Bool("v", false, "Verbose debug messages")
 
 	flag.CommandLine.Parse(os.Args[1:])
+
+	if *verbosePtr {
+		fmt.Println("Verbose mode on")
+	}
 
 	if *promptPtr {
 		go PromptHandler(broker, r)
@@ -150,6 +155,12 @@ func main() {
 			for {
 				text, _ := r.ReadString('\n')
 				broker.Notifier <- []byte(text)
+
+				if *verbosePtr {
+					currentTime := time.Now().Local()
+					fmt.Printf("[%s] %d clients: %s", currentTime.Format("2006-01-02 15:04:05"), len(broker.clients), text)
+				}
+
 				time.Sleep(time.Second)
 			}
 
