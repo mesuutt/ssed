@@ -40,9 +40,9 @@ Sent message: how are you?
 ```
 $ ssed -h
 Usage of ssed:
+  -v    Verbose debug messages
   -l string
         Listening address and port (default "localhost:3000")
   -p    Show prompt for message which send to clients
-
 ```
 
