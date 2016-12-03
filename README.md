@@ -18,6 +18,13 @@ Reading from STDIN
 Listening on  localhost:3000
 ```
 
+You can use ssed with named pipes too:
+
+```bash
+cat <> myfifo | ssed &
+echo 'text' > myfifo
+```
+
 Also you can send messages to SSE clients with a prompt with starting `ssed` with `-p` argument:
 
 ```bash
