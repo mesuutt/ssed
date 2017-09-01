@@ -1,4 +1,4 @@
-###You can use ssed for pipe STDOUT of any command-line program to SSE clients.
+###### You can use ssed for pipe STDOUT of any command-line program to SSE clients.
 
 
 #### How to install ssed?
