@@ -116,54 +116,50 @@ func (broker *Broker) listen() {
 
 }
 
-func PromptHandler(broker *Broker, r *bufio.Reader) {
+func PromptHandler(broker *Broker) {
+	reader := bufio.NewReader(os.Stdin)
 
 	for {
-
 		fmt.Printf("(%d clients)-> ", len(broker.clients))
-
-		line, _, err := r.ReadLine()
+		line, _, err := reader.ReadLine()
 		if err != nil {
 			fmt.Println(err)
 		}
-		fmt.Printf("Sent message: %s\n", string(line))
-		broker.Notifier <- []byte(line)
+
+		if len(line) > 0 {
+			fmt.Printf("Sent message: %s\n", string(line))
+			broker.Notifier <- []byte(line)
+		}
 	}
 }
 
 func main() {
 
-	broker := NewServer()
-	r := bufio.NewReader(os.Stdin)
-
 	promptPtr := flag.Bool("p", false, "Show prompt for message which send to clients")
 	addrPtr := flag.String("l", "localhost:3000", "Listening address and port")
 	verbosePtr := flag.Bool("v", false, "Verbose debug messages")
-
 	flag.CommandLine.Parse(os.Args[1:])
 
 	if *verbosePtr {
 		fmt.Println("Verbose mode on")
 	}
 
+	broker := NewServer()
+
 	if *promptPtr {
-		go PromptHandler(broker, r)
+		go PromptHandler(broker)
 	} else {
 		fmt.Println("Reading from STDIN")
-
 		go func() {
-			for {
-				text, _ := r.ReadString('\n')
-				broker.Notifier <- []byte(text)
+			scan := bufio.NewScanner(os.Stdin)
+			for scan.Scan() {
+				broker.Notifier <- scan.Bytes()
 
 				if *verbosePtr {
 					currentTime := time.Now().Local()
-					fmt.Printf("[%s] %d clients: %s", currentTime.Format("2006-01-02 15:04:05"), len(broker.clients), text)
+					fmt.Printf("[%s] %d clients: %s\n", currentTime.Format("2006-01-02 15:04:05"), len(broker.clients), scan.Bytes())
 				}
-
-				time.Sleep(time.Second)
 			}
-
 		}()
 	}
 
